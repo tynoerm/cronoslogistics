@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://cronoslogistics.vercel.app/",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type"]
 };
@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // MongoDB Connection
-const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017/cronoslogistics";
+const mongoURI = process.env.MONGO_URI || "mongodb+srv://tinomutendaishemutemaringa:2fuVI0eXLlRwG71p@cluster0.wzm4cz9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(mongoURI)
   .then(() => console.log("Connected to MongoDB"))
