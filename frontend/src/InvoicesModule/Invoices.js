@@ -41,7 +41,7 @@ const Invoices = () => {
       return;
     }
 
-    const stringPattern = /^[A-Za-z0-9\s.,!?]+$/; // Corrected regex
+    const stringPattern = /^[A-Za-z0-9\s.,!?()]+$/; // Corrected regex
     if (!stringPattern.test(clientName) || !stringPattern.test(clientAddress) || !stringPattern.test(paymentMethod)) {
       setError("Client Name, Client Address, and Payment Method should only contain letters, numbers, spaces, and basic punctuation.");
       return;
