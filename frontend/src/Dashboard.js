@@ -71,6 +71,22 @@ const Dashboard = () => {
             </div>
           </div>
 
+
+           {/* Expenses Module Card */}
+           <div className="col">
+            <div className="card shadow-lg rounded">
+              <div className="card-body">
+                <div style={styles.cardHeader}>
+                  <FaRegMoneyBillAlt style={styles.icon} />
+                  <h5 className="card-title">TRUCK SERVICE SCHEDULE</h5>
+                </div>
+                <p className="card-text">truck services</p>
+                <Link to="/Expenses" className="btn btn-primary">Next</Link>
+              </div>
+            </div>
+          </div>
+
+
         
         </div>
       </div>
