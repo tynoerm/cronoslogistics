@@ -28,6 +28,7 @@ import { quotationRoutes } from './routes/SalesModule/quotation.js';
 import { expensesRoutes } from './routes/ExpensesModule/expenses.js';
 import { stocksRoutes } from './routes/StockModule/stocks.js';
 import { salesRoutes } from './routes/SalesModule/sales.js';
+import { truckserviceRoutes } from './routes/TruckserviceModule/Truckservice.js';
 
 
 import {ordersRoutes } from './routes/OrdersModule/Orders.js'
@@ -40,6 +41,8 @@ app.use("/expense", expensesRoutes);
 app.use("/stock", stocksRoutes);
 app.use("/salesmodel", salesRoutes);
 
+
+app.use("/truckservice", truckserviceRoutes)
 app.use("/invoice", invoiceRoutes)
 app.use("/order", ordersRoutes)
 app.use("/payment", paymentRoutes)
