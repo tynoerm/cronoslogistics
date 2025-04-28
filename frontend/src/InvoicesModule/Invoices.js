@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 
 const Invoices = () => {
-  const [invoicesForm, setInvoicesform] = useState([]);
-  const [invoicesInsert, setInvoicesinsert] = useState({});
+  const [invoicesForm, setInvoicesForm] = useState([]);
+  const [invoicesInsert, setInvoicesInsert] = useState({});
 
   const [date, setDate] = useState("");
-  const [clientName, setClientname] = useState("");
-  const [clientAddress, setClientaddress] = useState("");
-  const [goodsDescription, setGoodsdescription] = useState("");
+  const [clientName, setClientName] = useState("");
+  const [clientAddress, setClientAddress] = useState("");
+  const [goodsDescription, setGoodsDescription] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [paymentMethod, setPaymentmethod] = useState("");
-  const [totalamountDue, setTotalamountdue] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [totalAmountDue, setTotalAmountDue] = useState("");
 
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
@@ -23,15 +23,15 @@ const Invoices = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
 
   const filteredInvoices = invoicesForm.filter(q => {
-    const invoicesDate = q.date ? new Date(q.date).toISOString().split("T")[0] : "";
-    return invoicesDate === selectedDate;
+    const invoiceDate = q.date ? new Date(q.date).toISOString().split("T")[0] : "";
+    return invoiceDate === selectedDate;
   });
 
   useEffect(() => {
     axios.get("https://cronoslogistics.onrender.com/invoice/")
-        .then(res => setInvoicesform(res.data.data)) // Update state with fetched orders
-        .catch(error => console.log(error));
-}, []);
+      .then(res => setInvoicesForm(res.data.data))
+      .catch(error => console.log(error));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,14 +40,15 @@ const Invoices = () => {
       setError("All fields are required");
       return;
     }
-    const stringPattern = /^[A-Za-z\s.,!?]+$/123456789;
+
+    const stringPattern = /^[A-Za-z0-9\s.,!?]+$/; // Corrected regex
     if (!stringPattern.test(clientName) || !stringPattern.test(clientAddress) || !stringPattern.test(paymentMethod)) {
-      setError("Client Name, Client Address, and Payment Method should only contain letters and spaces.");
+      setError("Client Name, Client Address, and Payment Method should only contain letters, numbers, spaces, and basic punctuation.");
       return;
     }
 
-    if (isNaN(quantity) || quantity <= 0 || isNaN(totalamountDue) || totalamountDue < 0) {
-      setError("Figures should be positive");
+    if (isNaN(quantity) || quantity <= 0 || isNaN(totalAmountDue) || totalAmountDue <= 0) {
+      setError("Quantity and Total Amount Due must be positive numbers.");
       return;
     }
 
@@ -60,14 +61,16 @@ const Invoices = () => {
       goodsDescription,
       quantity,
       paymentMethod,
-      totalamountDue
+      totalAmountDue
     };
-    axios
-      .post("https://cronoslogistics.onrender.com/invoice/create-invoice", invoiceInsert)
+
+    axios.post("https://cronoslogistics.onrender.com/invoice/create-invoice", invoiceInsert)
       .then((res) => {
         console.log({ status: res.status });
-        setInvoicesform(prev => [...prev, invoiceInsert]);
-      });
+        setInvoicesForm(prev => [...prev, invoiceInsert]);
+      })
+      .catch(error => console.log(error));
+
     setShow(false);
   };
 
@@ -90,7 +93,12 @@ const Invoices = () => {
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="text-secondary">Invoices created on: {selectedDate}</h2>
-        <input type="date" className="form-control w-auto" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
+        <input
+          type="date"
+          className="form-control w-auto"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+        />
       </div>
 
       <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} size="xl">
@@ -100,51 +108,76 @@ const Invoices = () => {
         <Modal.Body>
           <form onSubmit={handleSubmit}>
             {error && <div className="alert alert-danger">{error}</div>}
+
             <div className="row mb-3">
               <div className="col-md-6">
                 <label htmlFor="date" className="form-label">Date</label>
-                <input type="date" className="form-control" id="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                <input
+                  type="date"
+                  className="form-control"
+                  id="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
               </div>
               <div className="col-md-6">
-                <label className="form-label">Client Name</label>
-                <input type="text" className="form-control" id="clientName" value={clientName} onChange={(e) => setClientname(e.target.value)} />
+                <label htmlFor="clientName" className="form-label">Client Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="clientName"
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                />
               </div>
             </div>
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <label className="form-label">Client Address</label>
-                <input type="text" className="form-control" id="clientAddress" value={clientAddress} onChange={(e) => setClientaddress(e.target.value)} />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Quantity</label>
-                <input type="number" className="form-control" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
-              </div>
-            </div>
-
-
-
-
-            <div className="row mb-3">  {/* Wrap in a row to ensure it's part of a grid */}
-    <div className="col-12"> {/* Use col-12 to make it span the entire row */}
-        <label htmlFor="goodsDescription" className="form-label">Goods Description</label>
-        <textarea
-            type="text"
-            className="form-control"
-            id="goodsDescription"
-            value={goodsDescription}
-            onChange={(e) => setGoodsdescription(e.target.value)}
-            rows="4"  // Optional: Adjust rows to make it taller
-        />
-    </div>
-</div>
-
-  
 
             <div className="row mb-3">
               <div className="col-md-6">
-                <label className="form-label">Payment Methodd</label>
-                <select className="form-control" value={paymentMethod} onChange={(e) => setPaymentmethod(e.target.value)}>
-                  <option value=""></option>
+                <label htmlFor="clientAddress" className="form-label">Client Address</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="clientAddress"
+                  value={clientAddress}
+                  onChange={(e) => setClientAddress(e.target.value)}
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="quantity" className="form-label">Quantity</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="quantity"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="row mb-3">
+              <div className="col-12">
+                <label htmlFor="goodsDescription" className="form-label">Goods Description</label>
+                <textarea
+                  className="form-control"
+                  id="goodsDescription"
+                  value={goodsDescription}
+                  onChange={(e) => setGoodsDescription(e.target.value)}
+                  rows="4"
+                />
+              </div>
+            </div>
+
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="paymentMethod" className="form-label">Payment Method</label>
+                <select
+                  className="form-control"
+                  id="paymentMethod"
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                >
+                  <option value="">Select Payment Method</option>
                   <option value="Credit Card">Credit Card</option>
                   <option value="Debit Card">Debit Card</option>
                   <option value="PayPal">PayPal</option>
@@ -152,19 +185,22 @@ const Invoices = () => {
                   <option value="Cash">Cash</option>
                 </select>
               </div>
+
               <div className="col-md-6">
-                <label className="form-label">Total Amount Due</label>
-                <input type="number"
-                 className="form-control" id="quantity"
-                  value={quantity}
-                   onChange={(e) => setQuantity(e.target.value)} />
+                <label htmlFor="totalAmountDue" className="form-label">Total Amount Due</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="totalAmountDue"
+                  value={totalAmountDue}
+                  onChange={(e) => setTotalAmountDue(e.target.value)}
+                />
               </div>
             </div>
 
-
-
-
-            <Button variant="primary" type="submit" className="w-100 mt-4">SAVE INVOICE</Button>
+            <Button variant="primary" type="submit" className="w-100 mt-4">
+              SAVE INVOICE
+            </Button>
           </form>
         </Modal.Body>
       </Modal>
@@ -191,12 +227,12 @@ const Invoices = () => {
                 <td>{invoice.goodsDescription}</td>
                 <td>{invoice.quantity}</td>
                 <td>{invoice.paymentMethod}</td>
-                <td>{invoice.totalamountDue}</td>
+                <td>{invoice.totalAmountDue}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="7">No invoices found for the selected date</td>
+              <td colSpan="7" className="text-center">No invoices found for the selected date</td>
             </tr>
           )}
         </tbody>
