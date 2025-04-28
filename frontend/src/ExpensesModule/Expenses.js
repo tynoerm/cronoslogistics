@@ -54,7 +54,7 @@ const Expenses = () => {
     }
 
     // Allow only letters, spaces, and basic punctuation for the string fields (adjust as necessary)
-    const stringPattern = /^[A-Za-z\s.,!?]+$/;
+    const stringPattern = /^[A-Za-z0-9\s.,!?()]+$/;
     if (!stringPattern.test(issuedTo) || !stringPattern.test(authorisedBy)) {
       setError("Issued To and Authorised By should only contain letters and spaces.");
       return;
