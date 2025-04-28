@@ -40,7 +40,7 @@ const Invoices = () => {
       setError("All fields are required");
       return;
     }
-    const stringPattern = /^[A-Za-z\s.,!?]+$/;
+    const stringPattern = /^[A-Za-z\s.,!?]+$/123456789;
     if (!stringPattern.test(clientName) || !stringPattern.test(clientAddress) || !stringPattern.test(paymentMethod)) {
       setError("Client Name, Client Address, and Payment Method should only contain letters and spaces.");
       return;
