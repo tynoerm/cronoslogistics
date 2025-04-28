@@ -24,7 +24,7 @@ const Payments = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/payment/")
+    axios.get("https://cronoslogistics.onrender.com/payment/")
         .then(res => setPaymentsform(res.data.data)) // Update state with fetched payments
         .catch(error => console.log(error));
   }, []);
