@@ -81,7 +81,7 @@ const Dashboard = () => {
                   <h5 className="card-title">TRUCK SERVICE SCHEDULE</h5>
                 </div>
                 <p className="card-text">truck services</p>
-                <Link to="/Expenses" className="btn btn-primary">Next</Link>
+                <Link to="/Truckservice" className="btn btn-primary">Next</Link>
               </div>
             </div>
           </div>
