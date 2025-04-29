@@ -24,7 +24,7 @@ router.route("/create-truckservice").post(async (req, res, next) => {  // Update
     });
 });
 
-});
+
 router.route("/").get(async (req, res, next) => {  // Updated route
   await truckserviceSchema
     .find()
