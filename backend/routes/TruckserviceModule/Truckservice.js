@@ -7,19 +7,21 @@ import truckserviceSchema from "../../models/TruckserviceModule/Truckservice.js"
 
 let router = express.Router();
 
-
-router.route("/create-truckservice").post(async (req, res, next) => {
-  try {
-    const result = await truckserviceSchema.create(req.body);
-    res.json({
-      data: result,
-      message: "record created successfully",
-      status: 200,
+// Create an order
+router.route("/create-truckservice").post(async (req, res, next) => {  // Updated route
+  await truckserviceSchema
+    .create(req.body)
+    .then((result) => {
+      res.json({
+        data: result,
+        message: "record created",  // Updated message
+        status: 200,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return next(err);
     });
-  } catch (err) {
-    console.error("Error inserting truck service:", err);
-    res.status(500).json({ error: err.message });
-  }
 });
 
 });
