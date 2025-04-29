@@ -18,7 +18,7 @@ let truckserviceSchema = new Schema({
     type: Number,
     required: true
   },
-  nextServiceMileage: {
+  nextServicemileage: {
     type: Number,
     required: true
   }
